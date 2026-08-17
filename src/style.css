@@ -1,0 +1,204 @@
+/* ══════════════════════════════════════
+   Birthday Game · Global Styles
+   ══════════════════════════════════════ */
+
+@font-face {
+  font-family: 'Pixel';
+  src: url('./assets/fonts/zpix.ttf') format('truetype');
+  font-weight: normal;
+}
+
+/* ── Reset ── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+html, body {
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+  font-family: 'Pixel', "PingFang SC", "Microsoft YaHei", sans-serif;
+  min-height: 100vh;
+  transition: background 0.8s ease;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* ══════════════════════════════════════
+   Color Stages — 白到彩的蛋糕
+   ══════════════════════════════════════ */
+
+/* Stage 0: 纯白 (开始页) */
+.color-stage-0 {
+  --bg: #FFFFFF;
+  --bg-secondary: #FAFAFA;
+  --text: #5D4E3C;
+  --text-light: #A09080;
+  --accent: #D4A0A0;
+  --accent-hover: #C08080;
+  --border: #C0B0A0;
+  --border-dark: #8B7D6B;
+  --card-back: #F0EBE5;
+  --shadow: rgba(139, 125, 107, 0.15);
+}
+
+/* Stage 1: 故事 · 一点点颜色晕开 */
+.color-stage-1 {
+  --bg: #FFFCF8;
+  --bg-secondary: #FFF8F0;
+  --text: #5D4E3C;
+  --text-light: #A09080;
+  --accent: #E8A0A8;
+  --accent-hover: #D08890;
+  --border: #C0B0A0;
+  --border-dark: #8B7D6B;
+  --card-back: #F0EBE5;
+  --shadow: rgba(139, 125, 107, 0.15);
+}
+
+/* Stage 2: 第一轮 · 浅色 */
+.color-stage-2 {
+  --bg: #FFF8F2;
+  --bg-secondary: #FFF0E8;
+  --text: #5D4E3C;
+  --text-light: #A09080;
+  --accent: #F0A0B0;
+  --accent-hover: #E08898;
+  --border: #C0B0A0;
+  --border-dark: #8B7D6B;
+  --card-back: #EDE5DD;
+  --shadow: rgba(139, 125, 107, 0.18);
+}
+
+/* Stage 3: 第二轮 · 彩色加深 */
+.color-stage-3 {
+  --bg: #FFF0E8;
+  --bg-secondary: #FFE8D8;
+  --text: #4A3C2E;
+  --text-light: #8B7D6B;
+  --accent: #F08098;
+  --accent-hover: #E06880;
+  --border: #B8A090;
+  --border-dark: #7A6C5C;
+  --card-back: #E8DDD5;
+  --shadow: rgba(120, 100, 80, 0.2);
+}
+
+/* Stage 4: 完成 · 五彩蛋糕 */
+.color-stage-4 {
+  --bg: linear-gradient(135deg, #FFE8E8 0%, #FFF0D0 25%, #E8FFE8 50%, #E0F0FF 75%, #F0E8FF 100%);
+  --bg-secondary: #FFF5F0;
+  --text: #4A3C2E;
+  --text-light: #8B7D6B;
+  --accent: #F07088;
+  --accent-hover: #E05070;
+  --border: #D0A090;
+  --border-dark: #8B6050;
+  --card-back: #E8DDD5;
+  --shadow: rgba(120, 80, 60, 0.2);
+}
+
+/* ══════════════════════════════════════
+   Pixel UI Components
+   ══════════════════════════════════════ */
+
+.pixel-box {
+  border: 3px solid var(--border-dark);
+  background: #fff;
+  box-shadow:
+    0 4px 0 0 var(--border),
+    4px 0 0 0 var(--border),
+    4px 4px 0 0 var(--shadow);
+}
+
+.pixel-btn {
+  display: inline-block;
+  padding: 12px 32px;
+  border: 3px solid var(--border-dark);
+  background: var(--accent);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow:
+    0 4px 0 0 var(--accent-hover),
+    0 6px 0 0 var(--shadow);
+  letter-spacing: 2px;
+  transition: transform 0.1s, box-shadow 0.1s;
+  font-family: inherit;
+  user-select: none;
+}
+
+.pixel-btn:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+.pixel-btn--ghost {
+  background: var(--bg-secondary, #f5f5f5);
+  color: var(--text-light);
+  box-shadow:
+    0 4px 0 0 var(--border),
+    0 6px 0 0 var(--shadow);
+}
+
+.pixel-btn--ghost:active {
+  transform: translateY(4px);
+  box-shadow: none;
+}
+
+/* ══════════════════════════════════════
+   Animations
+   ══════════════════════════════════════ */
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15% { transform: translateX(-10px) rotate(-2deg); }
+  30% { transform: translateX(10px) rotate(2deg); }
+  45% { transform: translateX(-8px) rotate(-1deg); }
+  60% { transform: translateX(8px) rotate(1deg); }
+  75% { transform: translateX(-4px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInSlow {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popIn {
+  0% { opacity: 0; transform: scale(0.8); }
+  70% { transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes cardFlip {
+  0% { transform: rotateY(0deg); }
+  100% { transform: rotateY(180deg); }
+}
+
+.shake { animation: shake 0.5s ease; }
+.fade-in { animation: fadeIn 0.6s ease forwards; }
+.pop-in { animation: popIn 0.4s ease forwards; }
+.bounce { animation: bounce 1s ease infinite; }
+.float { animation: float 2s ease-in-out infinite; }
