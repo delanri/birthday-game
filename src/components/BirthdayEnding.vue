@@ -4,12 +4,11 @@ import { ref, onMounted } from 'vue'
 const emit = defineEmits(['back'])
 
 const lines = [
-  { text: '🎂', size: '48px', weight: 700, spacing: '0', mb: '16px' },
-  { text: '生日快乐！', size: '28px', weight: 700, spacing: '4px', mb: '24px' },
-  { text: '在这个特别的日子里', size: '15px', weight: 400, spacing: '1px', mb: '8px' },
-  { text: '希望你永远被美好的回忆包围', size: '15px', weight: 400, spacing: '1px', mb: '8px' },
-  { text: '每一段冒险都有人陪在身边', size: '15px', weight: 400, spacing: '1px', mb: '24px' },
-  { text: '—— 来自你的朋友 ♡', size: '14px', weight: 600, spacing: '2px', mb: '0' },
+  { text: '你把它们都找到了。', size: '15px', weight: 400, spacing: '1.5px', mb: '8px' },
+  { text: '那些蜡烛、竹竿、干花、收据——', size: '15px', weight: 400, spacing: '1.5px', mb: '8px' },
+  { text: '都是你们一起留下的。', size: '15px', weight: 400, spacing: '1.5px', mb: '28px' },
+  { text: '货架上以后还会多新的东西。', size: '15px', weight: 400, spacing: '1.5px', mb: '28px' },
+  { text: '生日快乐，影子。', size: '22px', weight: 700, spacing: '3px', mb: '0' },
 ]
 
 const visibleCount = ref(0)
