@@ -31,8 +31,8 @@ function goToStory() {
   currentPage.value = 'story'
 }
 
-function goToGame(round) {
-  colorStage.value = round === 1 ? 2 : 3
+function goToGame() {
+  colorStage.value = 2
   currentPage.value = 'game'
 }
 
@@ -62,12 +62,12 @@ function backToStart() {
     />
     <StoryPage
       v-if="currentPage === 'story'"
-      @done="goToGame(1)"
+      @done="goToGame"
     />
     <GameBoard
       v-if="currentPage === 'game'"
       :color-stage="colorStage"
-      @round-change="(r) => colorStage = r === 2 ? 3 : 2"
+      @round-change="colorStage = 3"
       @complete="goToBirthday"
     />
     <BirthdayEnding
