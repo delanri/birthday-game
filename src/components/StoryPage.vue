@@ -1,3 +1,101 @@
+<template>
+  <div class="story-page">
+
+    <!-- 暗色遮罩（入场渐暗后固定） -->
+    <div class="darkness-overlay" :style="{ opacity: overlayOpacity }"></div>
+
+    <!-- 头顶灯光（逐渐扩大） -->
+    <div class="light-glow" :style="{ opacity: lightOpacity }"></div>
+
+    <!-- ══ 装饰层 ══ -->
+    <div class="decoration-layer">
+      <!-- 烛火 -->
+      <Transition name="deco">
+        <div v-if="activeDecoration === 'candle'" class="deco">
+          <span class="glow glow-1"></span>
+          <span class="glow glow-2"></span>
+          <span class="glow glow-3"></span>
+        </div>
+      </Transition>
+
+      <!-- 水波 -->
+      <Transition name="deco">
+        <div v-if="activeDecoration === 'water'" class="deco">
+          <span class="wave wave-1"></span>
+          <span class="wave wave-2"></span>
+          <span class="wave wave-3"></span>
+          <span class="wave wave-4"></span>
+        </div>
+      </Transition>
+
+      <!-- 花瓣 -->
+      <Transition name="deco">
+        <div v-if="activeDecoration === 'petals'" class="deco">
+          <span
+            v-for="(p, i) in petals"
+            :key="i"
+            class="petal"
+            :style="{
+              left: p.left + '%',
+              fontSize: p.size + 'px',
+              animationDelay: p.delay + 's',
+              animationDuration: p.dur + 's',
+            }"
+          >{{ p.sym }}</span>
+        </div>
+      </Transition>
+
+      <!-- 收据 -->
+      <Transition name="deco">
+        <div v-if="activeDecoration === 'receipt'" class="deco">
+          <div class="receipt-paper">
+            <span class="rline"></span>
+            <span class="rline short"></span>
+            <span class="rline"></span>
+            <span class="rline medium"></span>
+            <span class="rline short"></span>
+            <span class="rstain"></span>
+            <span class="rstain stain-2"></span>
+          </div>
+        </div>
+      </Transition>
+    </div>
+
+    <!-- ══ 内容 ══ -->
+    <div class="story-content" :class="{ fading: contentFading }">
+      <div class="story-lines">
+        <p
+          v-for="(line, i) in displayedLines"
+          :key="i"
+          class="story-line"
+          :class="{ empty: line.empty, intro: line.intro }"
+        >{{ line.text }}</p>
+
+        <p
+          v-if="currentText !== '' || showCursor"
+          ref="typingLineRef"
+          class="story-line typing-line"
+        >
+          {{ currentText }}<span v-if="showCursor" class="cursor">▊</span>
+        </p>
+      </div>
+
+      <Transition name="btn">
+        <button
+          v-if="showButton"
+          class="door-btn"
+          @click="openDoor"
+        >
+          靠近看看
+        </button>
+      </Transition>
+    </div>
+
+    <!-- 推门光效 -->
+    <div v-if="doorOpen" class="door-light"></div>
+  </div>
+</template>
+
 <script setup>
 import { ref, onMounted, nextTick } from 'vue'
 
@@ -163,104 +261,6 @@ onMounted(() => {
   })
 })
 </script>
-
-<template>
-  <div class="story-page">
-
-    <!-- 暗色遮罩（入场渐暗后固定） -->
-    <div class="darkness-overlay" :style="{ opacity: overlayOpacity }"></div>
-
-    <!-- 头顶灯光（逐渐扩大） -->
-    <div class="light-glow" :style="{ opacity: lightOpacity }"></div>
-
-    <!-- ══ 装饰层 ══ -->
-    <div class="decoration-layer">
-      <!-- 烛火 -->
-      <Transition name="deco">
-        <div v-if="activeDecoration === 'candle'" class="deco">
-          <span class="glow glow-1"></span>
-          <span class="glow glow-2"></span>
-          <span class="glow glow-3"></span>
-        </div>
-      </Transition>
-
-      <!-- 水波 -->
-      <Transition name="deco">
-        <div v-if="activeDecoration === 'water'" class="deco">
-          <span class="wave wave-1"></span>
-          <span class="wave wave-2"></span>
-          <span class="wave wave-3"></span>
-          <span class="wave wave-4"></span>
-        </div>
-      </Transition>
-
-      <!-- 花瓣 -->
-      <Transition name="deco">
-        <div v-if="activeDecoration === 'petals'" class="deco">
-          <span
-            v-for="(p, i) in petals"
-            :key="i"
-            class="petal"
-            :style="{
-              left: p.left + '%',
-              fontSize: p.size + 'px',
-              animationDelay: p.delay + 's',
-              animationDuration: p.dur + 's',
-            }"
-          >{{ p.sym }}</span>
-        </div>
-      </Transition>
-
-      <!-- 收据 -->
-      <Transition name="deco">
-        <div v-if="activeDecoration === 'receipt'" class="deco">
-          <div class="receipt-paper">
-            <span class="rline"></span>
-            <span class="rline short"></span>
-            <span class="rline"></span>
-            <span class="rline medium"></span>
-            <span class="rline short"></span>
-            <span class="rstain"></span>
-            <span class="rstain stain-2"></span>
-          </div>
-        </div>
-      </Transition>
-    </div>
-
-    <!-- ══ 内容 ══ -->
-    <div class="story-content" :class="{ fading: contentFading }">
-      <div class="story-lines">
-        <p
-          v-for="(line, i) in displayedLines"
-          :key="i"
-          class="story-line"
-          :class="{ empty: line.empty, intro: line.intro }"
-        >{{ line.text }}</p>
-
-        <p
-          v-if="currentText !== '' || showCursor"
-          ref="typingLineRef"
-          class="story-line typing-line"
-        >
-          {{ currentText }}<span v-if="showCursor" class="cursor">▊</span>
-        </p>
-      </div>
-
-      <Transition name="btn">
-        <button
-          v-if="showButton"
-          class="door-btn"
-          @click="openDoor"
-        >
-          靠近看看
-        </button>
-      </Transition>
-    </div>
-
-    <!-- 推门光效 -->
-    <div v-if="doorOpen" class="door-light"></div>
-  </div>
-</template>
 
 <style scoped>
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

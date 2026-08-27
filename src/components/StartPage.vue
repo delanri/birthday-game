@@ -1,3 +1,113 @@
+<template>
+  <div class="start-page">
+
+    <!-- ══ 浮动背景粒子 ══ -->
+    <div class="floating-layer" :class="{ visible: show.bg }">
+      <span
+        v-for="(f, i) in floaters"
+        :key="i"
+        class="floater"
+        :class="{ 'floater--colorful': colorful }"
+        :style="{
+          left: f.left + '%',
+          fontSize: f.size + 'px',
+          animationDelay: f.delay + 's',
+          animationDuration: f.dur + 's',
+          '--base-opacity': f.baseOpacity,
+          '--hue': f.hue,
+        }"
+      >{{ f.sym }}</span>
+    </div>
+
+    <div class="start-content">
+
+      <!-- ══ 像素小蛋糕（掉落弹跳入场）══ -->
+      <div
+        class="pixel-cake"
+        :class="{
+          'drop-in': show.cake,
+          'white': !colorful,
+          'cake-float': show.cake && colorful,
+        }"
+      >
+        <div class="cake-top">{{ colorful ? '🎂' : '🎁' }}</div>
+      </div>
+
+      <!-- ══ 标题框（展开入场 + 四角装饰 + shimmer）══ -->
+      <div
+        class="title-frame pixel-box"
+        :class="{ 'expand-in': show.title }"
+      >
+        <!-- 四角像素装饰 -->
+        <span class="corner corner-tl"></span>
+        <span class="corner corner-tr"></span>
+        <span class="corner corner-bl"></span>
+        <span class="corner corner-br"></span>
+
+        <!-- 标题 + shimmer 光扫 -->
+        <div class="title-shimmer-wrap">
+          <h1 class="title">回忆杂货铺₍ᐢ..ᐢ₎</h1>
+        </div>
+
+        <p class="subtitle">这里收藏着勇者们曾经的冒险故事</p>
+        <div class="pixel-divider"></div>
+        <p class="desc">
+          {{ colorful
+            ? '欢迎勇者大人回家！蛋糕已经准备好啦~'
+            : '店门还开着，要进来看看吗？૮₍ ◜ᵕ◝ ₎ა'
+          }}
+        </p>
+      </div>
+
+      <!-- ══ 按钮区（弹上来入场）══ -->
+      <div class="btn-group" :class="{ 'pop-up': show.buttons }">
+
+        <!-- 进入按钮 + 点击粒子容器 -->
+        <div class="start-btn-wrap">
+          <button class="pixel-btn" @click="onStart">
+            {{ colorful ? '再次进入' : '推门进入' }}
+          </button>
+          <span
+            v-for="p in clickParticles"
+            :key="p.id"
+            class="click-particle"
+            :style="{
+              left: p.x + 'px',
+              top: p.y + 'px',
+              '--dx': p.dx + 'px',
+              '--dy': p.dy + 'px',
+            }"
+          >{{ p.symbol }}</span>
+        </div>
+
+        <!-- 退出按钮 -->
+        <div class="exit-wrapper">
+          <button
+            class="pixel-btn pixel-btn--ghost"
+            :class="{ shake: exitShaking }"
+            @click="onExit"
+          >
+            只是路过
+          </button>
+          <Transition name="msg">
+            <div v-if="exitMsg" class="exit-msg pixel-box">
+              {{ exitMsg }}
+            </div>
+          </Transition>
+        </div>
+      </div>
+
+      <!-- ══ 底部小字 ══ -->
+      <p class="footer-text" :class="{ 'fade-in-up': show.footer }">
+        {{ colorful
+          ? '货架上的宝藏都找到啦 ♡'
+          : '每一份物品都在货架上等你୧₍ᐢ·͈༝·͈ᐢ₎୨'
+        }}
+      </p>
+    </div>
+  </div>
+</template>
+
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
 
@@ -92,116 +202,6 @@ const floaters = (() => {
   return arr
 })()
 </script>
-
-<template>
-  <div class="start-page">
-
-    <!-- ══ 浮动背景粒子 ══ -->
-    <div class="floating-layer" :class="{ visible: show.bg }">
-      <span
-        v-for="(f, i) in floaters"
-        :key="i"
-        class="floater"
-        :class="{ 'floater--colorful': colorful }"
-        :style="{
-          left: f.left + '%',
-          fontSize: f.size + 'px',
-          animationDelay: f.delay + 's',
-          animationDuration: f.dur + 's',
-          '--base-opacity': f.baseOpacity,
-          '--hue': f.hue,
-        }"
-      >{{ f.sym }}</span>
-    </div>
-
-    <div class="start-content">
-
-      <!-- ══ 像素小蛋糕（掉落弹跳入场）══ -->
-      <div
-        class="pixel-cake"
-        :class="{
-          'drop-in': show.cake,
-          'white': !colorful,
-          'cake-float': show.cake && colorful,
-        }"
-      >
-        <div class="cake-top">{{ colorful ? '🎂' : '🎁' }}</div>
-      </div>
-
-      <!-- ══ 标题框（展开入场 + 四角装饰 + shimmer）══ -->
-      <div
-        class="title-frame pixel-box"
-        :class="{ 'expand-in': show.title }"
-      >
-        <!-- 四角像素装饰 -->
-        <span class="corner corner-tl"></span>
-        <span class="corner corner-tr"></span>
-        <span class="corner corner-bl"></span>
-        <span class="corner corner-br"></span>
-
-        <!-- 标题 + shimmer 光扫 -->
-        <div class="title-shimmer-wrap">
-          <h1 class="title">回忆杂货铺₍ᐢ..ᐢ₎</h1>
-        </div>
-
-        <p class="subtitle">这里收藏着勇者们曾经的冒险故事</p>
-        <div class="pixel-divider"></div>
-        <p class="desc">
-          {{ colorful
-            ? '欢迎勇者大人回家！蛋糕已经准备好了~'
-            : '店门还开着，要进来看看吗？૮₍ ◜ᵕ◝ ₎ა'
-          }}
-        </p>
-      </div>
-
-      <!-- ══ 按钮区（弹上来入场）══ -->
-      <div class="btn-group" :class="{ 'pop-up': show.buttons }">
-
-        <!-- 进入按钮 + 点击粒子容器 -->
-        <div class="start-btn-wrap">
-          <button class="pixel-btn" @click="onStart">
-            {{ colorful ? '再次进入' : '推门进入' }}
-          </button>
-          <span
-            v-for="p in clickParticles"
-            :key="p.id"
-            class="click-particle"
-            :style="{
-              left: p.x + 'px',
-              top: p.y + 'px',
-              '--dx': p.dx + 'px',
-              '--dy': p.dy + 'px',
-            }"
-          >{{ p.symbol }}</span>
-        </div>
-
-        <!-- 退出按钮 -->
-        <div class="exit-wrapper">
-          <button
-            class="pixel-btn pixel-btn--ghost"
-            :class="{ shake: exitShaking }"
-            @click="onExit"
-          >
-            只是路过
-          </button>
-          <Transition name="msg">
-            <div v-if="exitMsg" class="exit-msg pixel-box">
-              {{ exitMsg }}
-            </div>
-          </Transition>
-        </div>
-      </div>
-
-      <!-- ══ 底部小字 ══ -->
-      <p class="footer-text" :class="{ 'fade-in-up': show.footer }">
-        {{ colorful
-          ? '货架上的宝藏都找到啦 ♡'
-          : '每一份物品都在货架上等你୧₍ᐢ·͈༝·͈ᐢ₎୨'
-        }}
-      </p>
-    </div>
-  </div>
-</template>
 
 <style scoped>
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

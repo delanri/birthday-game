@@ -1,3 +1,189 @@
+<template>
+  <div class="game-page">
+
+    <!-- ══ 教程 ══ -->
+    <TutorialPage
+      v-if="phase === 'tutorial'"
+      :round="round"
+      @done="onTutorialDone"
+    />
+
+    <div class="game-container">
+
+      <!-- ── 顶部提示 ── -->
+      <div class="game-header">
+        <span v-if="phase === 'preview'" class="header-text">
+          记住它们！ {{ countdown }}s
+        </span>
+        <span v-else-if="phase === 'playing'" class="header-text">
+          {{ round === 2 ? '第二轮 · 小心捣蛋鬼！' : '翻开卡片，找到配对 ♪' }}
+        </span>
+        <span v-else class="header-text">完成！</span>
+      </div>
+
+      <!-- ── 收集栏 ── -->
+      <div class="collection-bar">
+        <div
+          v-for="g in GROUPS"
+          :key="g.id"
+          class="collect-icon"
+          :class="{
+            half: groupProg[g.id] === 1,
+            done: groupProg[g.id] === 2,
+          }"
+        >
+          <span class="collect-emoji">{{ g.icons[0] }}</span>
+          <span
+            v-if="groupProg[g.id] === 2"
+            class="collect-label"
+            :style="{ color: g.accent }"
+          >{{ g.name }}</span>
+        </div>
+      </div>
+
+      <!-- ── 卡牌网格 ── -->
+      <div class="card-grid">
+        <div
+          v-for="(card, idx) in cards"
+          :key="idx"
+          class="card-cell"
+        >
+          <!-- 已配对 → 空位 -->
+          <div v-if="isMatched(idx)" class="card-slot-empty"></div>
+
+          <!-- 活牌 -->
+          <div
+            v-else
+            class="card-wrapper"
+            :class="{
+              'is-shaking':  shakingIdx === idx,
+              'is-crawling': !!crawlAnims[idx],
+              'has-legs':    legSet.has(idx),
+            }"
+            :style="wrapperStyle(idx)"
+            @click="onCardClick(idx)"
+          >
+            <div class="card-inner" :class="{ 'is-flipped': isFlipped(idx) }">
+              <!-- 背面 -->
+              <div class="card-back">
+                <span class="back-q">?</span>
+              </div>
+              <!-- 正面 -->
+              <div
+                class="card-front"
+                :style="{
+                  background: getGroup(card.groupId).color,
+                  borderColor: getGroup(card.groupId).accent,
+                }"
+              >
+                <span class="card-icon">{{ card.icon }}</span>
+                <span
+                  v-if="phase === 'preview'"
+                  class="card-group-tag"
+                  :style="{ color: getGroup(card.groupId).accent }"
+                >{{ getGroup(card.groupId).name }}</span>
+              </div>
+            </div>
+
+            <!-- 像素小腿 -->
+            <div v-if="legSet.has(idx)" class="pixel-legs">
+              <span class="p-leg"></span>
+              <span class="p-leg"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── 底部栏 ── -->
+      <div class="game-footer">
+        <!-- 相册入口（假） -->
+        <button class="album-btn" :class="{ unlocked: albumUnlocked }" disabled>
+          {{ albumUnlocked ? '📷' : '🔒' }}
+          <span class="album-label">相册</span>
+        </button>
+
+        <!-- 作弊 -->
+        <button v-if="phase === 'playing'" class="cheat-btn" @click="cheatSkip">
+          🚀 跳过
+        </button>
+      </div>
+
+      <!-- ── 回合结束按钮 ── -->
+      <div v-if="phase === 'roundDone' && !showPopup" class="done-actions">
+        <button v-if="round === 1" class="pixel-btn" @click="startRound2">
+          再来一次 ✨
+        </button>
+        <button v-else class="pixel-btn" @click="emit('complete')">
+          查看最后的惊喜 ♡
+        </button>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════════════════════════
+         弹窗 & 提示
+         ══════════════════════════════════════════════ -->
+
+    <!-- 捣蛋消息 -->
+    <Transition name="pop">
+      <div v-if="mischiefMsg" class="mischief-toast">
+        {{ mischiefMsg }}
+      </div>
+    </Transition>
+
+    <!-- 一组收集完成 -->
+    <Transition name="pop">
+      <div v-if="showPopup?.type === 'group'" class="overlay-popup">
+        <div class="popup-icons">
+          {{ getGroup(showPopup.gid).icons[0] }}
+          {{ getGroup(showPopup.gid).icons[1] }}
+        </div>
+        <div class="popup-title" :style="{ color: getGroup(showPopup.gid).accent }">
+          {{ getGroup(showPopup.gid).name }} · 收集完成！
+        </div>
+        <div class="popup-sub">{{ getGroup(showPopup.gid).label }}</div>
+      </div>
+    </Transition>
+
+    <!-- 第一轮完成 -->
+    <Transition name="pop">
+      <div v-if="showPopup?.type === 'round1'" class="overlay">
+        <div class="overlay-box">
+          <div class="popup-emoji">🎉</div>
+          <div class="popup-title">记忆全部找回来了！</div>
+          <div class="popup-sub">相册已解锁</div>
+          <div class="popup-hint">✨ 还有一张隐藏照片…再玩一次解锁它？</div>
+          <div class="popup-btns">
+            <button class="pixel-btn pixel-btn--ghost" @click="showPopup = null">
+              先歇歇
+            </button>
+            <button class="pixel-btn" @click="showPopup = null; startRound2()">
+              再来一次！
+            </button>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <!-- 第二轮完成 -->
+    <Transition name="pop">
+      <div v-if="showPopup?.type === 'round2'" class="overlay">
+        <div class="overlay-box">
+          <div class="popup-emoji">🏆</div>
+          <div class="popup-title">全成就解锁！</div>
+          <div class="popup-sub">你找到了所有记忆碎片</div>
+          <button
+            class="pixel-btn"
+            @click="showPopup = null; emit('complete')"
+          >
+            查看隐藏照片 ♡
+          </button>
+        </div>
+      </div>
+    </Transition>
+
+  </div>
+</template>
+
 <script setup>
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import TutorialPage from './TutorialPage.vue'
@@ -379,192 +565,6 @@ function wrapperStyle(idx) {
   return {}
 }
 </script>
-
-<template>
-  <div class="game-page">
-
-    <!-- ══ 教程 ══ -->
-    <TutorialPage
-      v-if="phase === 'tutorial'"
-      :round="round"
-      @done="onTutorialDone"
-    />
-
-    <div class="game-container">
-
-      <!-- ── 顶部提示 ── -->
-      <div class="game-header">
-        <span v-if="phase === 'preview'" class="header-text">
-          记住它们！ {{ countdown }}s
-        </span>
-        <span v-else-if="phase === 'playing'" class="header-text">
-          {{ round === 2 ? '第二轮 · 小心捣蛋鬼！' : '翻开卡片，找到配对 ♪' }}
-        </span>
-        <span v-else class="header-text">完成！</span>
-      </div>
-
-      <!-- ── 收集栏 ── -->
-      <div class="collection-bar">
-        <div
-          v-for="g in GROUPS"
-          :key="g.id"
-          class="collect-icon"
-          :class="{
-            half: groupProg[g.id] === 1,
-            done: groupProg[g.id] === 2,
-          }"
-        >
-          <span class="collect-emoji">{{ g.icons[0] }}</span>
-          <span
-            v-if="groupProg[g.id] === 2"
-            class="collect-label"
-            :style="{ color: g.accent }"
-          >{{ g.name }}</span>
-        </div>
-      </div>
-
-      <!-- ── 卡牌网格 ── -->
-      <div class="card-grid">
-        <div
-          v-for="(card, idx) in cards"
-          :key="idx"
-          class="card-cell"
-        >
-          <!-- 已配对 → 空位 -->
-          <div v-if="isMatched(idx)" class="card-slot-empty"></div>
-
-          <!-- 活牌 -->
-          <div
-            v-else
-            class="card-wrapper"
-            :class="{
-              'is-shaking':  shakingIdx === idx,
-              'is-crawling': !!crawlAnims[idx],
-              'has-legs':    legSet.has(idx),
-            }"
-            :style="wrapperStyle(idx)"
-            @click="onCardClick(idx)"
-          >
-            <div class="card-inner" :class="{ 'is-flipped': isFlipped(idx) }">
-              <!-- 背面 -->
-              <div class="card-back">
-                <span class="back-q">?</span>
-              </div>
-              <!-- 正面 -->
-              <div
-                class="card-front"
-                :style="{
-                  background: getGroup(card.groupId).color,
-                  borderColor: getGroup(card.groupId).accent,
-                }"
-              >
-                <span class="card-icon">{{ card.icon }}</span>
-                <span
-                  v-if="phase === 'preview'"
-                  class="card-group-tag"
-                  :style="{ color: getGroup(card.groupId).accent }"
-                >{{ getGroup(card.groupId).name }}</span>
-              </div>
-            </div>
-
-            <!-- 像素小腿 -->
-            <div v-if="legSet.has(idx)" class="pixel-legs">
-              <span class="p-leg"></span>
-              <span class="p-leg"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── 底部栏 ── -->
-      <div class="game-footer">
-        <!-- 相册入口（假） -->
-        <button class="album-btn" :class="{ unlocked: albumUnlocked }" disabled>
-          {{ albumUnlocked ? '📷' : '🔒' }}
-          <span class="album-label">相册</span>
-        </button>
-
-        <!-- 作弊 -->
-        <button v-if="phase === 'playing'" class="cheat-btn" @click="cheatSkip">
-          🚀 跳过
-        </button>
-      </div>
-
-      <!-- ── 回合结束按钮 ── -->
-      <div v-if="phase === 'roundDone' && !showPopup" class="done-actions">
-        <button v-if="round === 1" class="pixel-btn" @click="startRound2">
-          再来一次 ✨
-        </button>
-        <button v-else class="pixel-btn" @click="emit('complete')">
-          查看最后的惊喜 ♡
-        </button>
-      </div>
-    </div>
-
-    <!-- ══════════════════════════════════════════════
-         弹窗 & 提示
-         ══════════════════════════════════════════════ -->
-
-    <!-- 捣蛋消息 -->
-    <Transition name="pop">
-      <div v-if="mischiefMsg" class="mischief-toast">
-        {{ mischiefMsg }}
-      </div>
-    </Transition>
-
-    <!-- 一组收集完成 -->
-    <Transition name="pop">
-      <div v-if="showPopup?.type === 'group'" class="overlay-popup">
-        <div class="popup-icons">
-          {{ getGroup(showPopup.gid).icons[0] }}
-          {{ getGroup(showPopup.gid).icons[1] }}
-        </div>
-        <div class="popup-title" :style="{ color: getGroup(showPopup.gid).accent }">
-          {{ getGroup(showPopup.gid).name }} · 收集完成！
-        </div>
-        <div class="popup-sub">{{ getGroup(showPopup.gid).label }}</div>
-      </div>
-    </Transition>
-
-    <!-- 第一轮完成 -->
-    <Transition name="pop">
-      <div v-if="showPopup?.type === 'round1'" class="overlay">
-        <div class="overlay-box">
-          <div class="popup-emoji">🎉</div>
-          <div class="popup-title">记忆全部找回来了！</div>
-          <div class="popup-sub">相册已解锁</div>
-          <div class="popup-hint">✨ 还有一张隐藏照片…再玩一次解锁它？</div>
-          <div class="popup-btns">
-            <button class="pixel-btn pixel-btn--ghost" @click="showPopup = null">
-              先歇歇
-            </button>
-            <button class="pixel-btn" @click="showPopup = null; startRound2()">
-              再来一次！
-            </button>
-          </div>
-        </div>
-      </div>
-    </Transition>
-
-    <!-- 第二轮完成 -->
-    <Transition name="pop">
-      <div v-if="showPopup?.type === 'round2'" class="overlay">
-        <div class="overlay-box">
-          <div class="popup-emoji">🏆</div>
-          <div class="popup-title">全成就解锁！</div>
-          <div class="popup-sub">你找到了所有记忆碎片</div>
-          <button
-            class="pixel-btn"
-            @click="showPopup = null; emit('complete')"
-          >
-            查看隐藏照片 ♡
-          </button>
-        </div>
-      </div>
-    </Transition>
-
-  </div>
-</template>
 
 <style scoped>
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

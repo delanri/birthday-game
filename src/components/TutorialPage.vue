@@ -1,23 +1,3 @@
-<script setup>
-import { ref, onMounted } from 'vue'
-
-const props = defineProps({
-  round: { type: Number, default: 1 },
-})
-
-const emit = defineEmits(['done'])
-
-const visibleSteps = ref(0)
-const showBtn = ref(false)
-
-onMounted(() => {
-  setTimeout(() => { visibleSteps.value = 1 }, 400)
-  setTimeout(() => { visibleSteps.value = 2 }, 2000)
-  setTimeout(() => { visibleSteps.value = 3 }, 3600)
-  setTimeout(() => { showBtn.value = true }, 5000)
-})
-</script>
-
 <template>
   <div class="tutorial-overlay">
     <div class="tutorial-box">
@@ -117,6 +97,26 @@ onMounted(() => {
     </div>
   </div>
 </template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+
+const props = defineProps({
+  round: { type: Number, default: 1 },
+})
+
+const emit = defineEmits(['done'])
+
+const visibleSteps = ref(0)
+const showBtn = ref(false)
+
+onMounted(() => {
+  setTimeout(() => { visibleSteps.value = 1 }, 400)
+  setTimeout(() => { visibleSteps.value = 2 }, 2000)
+  setTimeout(() => { visibleSteps.value = 3 }, 3600)
+  setTimeout(() => { showBtn.value = true }, 5000)
+})
+</script>
 
 <style scoped>
 /* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
