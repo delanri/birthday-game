@@ -104,10 +104,10 @@ const visibleSteps = ref(0)
 const showBtn = ref(false)
 
 onMounted(() => {
-  setTimeout(() => { visibleSteps.value = 1 }, 300)
-  setTimeout(() => { visibleSteps.value = 2 }, 1200)
-  setTimeout(() => { visibleSteps.value = 3 }, 2100)
-  setTimeout(() => { showBtn.value = true }, 3000)
+  setTimeout(() => { visibleSteps.value = 1 }, 500)
+  setTimeout(() => { visibleSteps.value = 2 }, 3000)
+  setTimeout(() => { visibleSteps.value = 3 }, 5500)
+  setTimeout(() => { showBtn.value = true }, 7500)
 })
 </script>
 

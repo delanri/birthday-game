@@ -4,8 +4,10 @@
 
 @font-face {
   font-family: 'Pixel';
-  src: url('./assets/fonts/zpix.ttf') format('truetype');
+  src: url('./assets/fonts/zpix.woff2') format('woff2'),
+       url('./assets/fonts/zpix.ttf') format('truetype');
   font-weight: normal;
+  font-display: swap;
 }
 
 /* ── Reset ── */
@@ -19,15 +21,21 @@
 
 html, body {
   overflow-x: hidden;
+  overflow-y: hidden;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior: none;
   font-family: 'Pixel', "PingFang SC", "Microsoft YaHei", sans-serif;
-  min-height: 100vh;
+  height: 100dvh;
+  min-height: 100dvh;
   transition: background 0.8s ease;
+  position: fixed;
+  width: 100%;
 }
 
 #app {
-  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100dvh;
+  overflow-y: auto;
 }
 
 /* ══════════════════════════════════════

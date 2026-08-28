@@ -30,12 +30,12 @@ const colorClass = computed(() => `color-stage-${colorStage.value}`)
 function goToStory() {
   colorStage.value = 1
   currentPage.value = 'story'
-  preloadImages()
 }
 
 function goToGame() {
   colorStage.value = 2
   currentPage.value = 'game'
+  preloadPhotos()
 }
 
 function goToBirthday() {
@@ -63,6 +63,7 @@ onMounted(() => {
     gameComplete.value = data.gameComplete || false
     colorStage.value = data.colorStage || 0
   }
+  preloadCards()
 })
 
 function saveProgress() {
@@ -72,12 +73,17 @@ function saveProgress() {
   }))
 }
 
-// App.vue 的 <script setup> 里加这个
-function preloadImages() {
+function preloadCards() {
   const cards = import.meta.glob('./assets/cards/*.png', { eager: true })
-  const photos = import.meta.glob('./assets/photos/*.jpg', { eager: true })
+  Object.values(cards).forEach(mod => {
+    const img = new Image()
+    img.src = mod.default
+  })
+}
 
-  Object.values({ ...cards, ...photos }).forEach(mod => {
+function preloadPhotos() {
+  const photos = import.meta.glob('./assets/photos/*.jpg', { eager: true })
+  Object.values(photos).forEach(mod => {
     const img = new Image()
     img.src = mod.default
   })
