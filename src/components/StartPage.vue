@@ -49,11 +49,11 @@
           <h1 class="title">回忆杂货铺₍ᐢ..ᐢ₎</h1>
         </div>
 
-        <p class="subtitle">这里收藏着勇者们曾经的冒险故事</p>
+        <p class="subtitle">这里收藏着一些奇怪的宝贝</p>
         <div class="pixel-divider"></div>
         <p class="desc">
           {{ colorful
-            ? '欢迎勇者大人回家！蛋糕已经准备好啦~'
+            ? '欢迎回来，灯一直为你开着~'
             : '店门还开着，要进来看看吗？૮₍ ◜ᵕ◝ ₎ა'
           }}
         </p>
@@ -105,6 +105,15 @@
         }}
       </p>
     </div>
+     <!-- ↓ 加在这里 -->
+    <div v-if="colorful" class="fab-group">
+      <button class="fab-btn" @click="showAlbum = true">📷</button>
+      <button class="fab-btn" @click="showAchievement = true">🏆</button>
+    </div>
+
+    <AlbumModal :visible="showAlbum" :unlocked-groups="[0,1,2,3]" :hidden-unlocked="true" @close="showAlbum = false" />
+    <AchievementModal :visible="showAchievement" @close="showAchievement = false" />
+
   </div>
 </template>
 
@@ -116,6 +125,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['start'])
+import AlbumModal from './AlbumModal.vue'
+import AchievementModal from './AchievementModal.vue'
+
+const showAlbum = ref(false)
+const showAchievement = ref(false)
 
 // ══ stagger 入场动画 ══
 const show = reactive({
@@ -145,7 +159,7 @@ const exitMessages = [
   '老板说不买不准走！',
   '逃跑失败 ❌ 货架挡住了去路',
   '路过也要进来坐坐嘛~',
-  '勇者不可以临阵脱逃！',
+  '老板拉住了你的袖子。',
 ]
 
 function onExit() {
@@ -552,5 +566,34 @@ const floaters = (() => {
   40%      { transform: translateX(4px); }
   60%      { transform: translateX(-3px); }
   80%      { transform: translateX(3px); }
+}
+
+.fab-group {
+  position: fixed;
+  bottom: 24px;
+  right: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 10;
+}
+.fab-btn {
+  width: 42px;
+  height: 42px;
+  border: 2px solid var(--border, #C8C0B0);
+  background: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 3px 0 0 var(--shadow, rgba(0,0,0,0.06));
+  transition: transform 0.1s;
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.fab-btn:active {
+  transform: translateY(2px);
+  box-shadow: none;
 }
 </style>

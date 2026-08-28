@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import StartPage from './components/StartPage.vue'
 import StoryPage from './components/StoryPage.vue'
 import GameBoard from './components/GameBoard.vue'
@@ -13,6 +13,7 @@ const gameComplete = ref(false)
 // ── 颜色阶段 ──
 // 0=纯白(开始) 1=微暖(故事) 2=浅色(第一轮) 3=彩色(第二轮) 4=五彩蛋糕(完成)
 const colorStage = ref(0)
+const pageFading = ref(false)
 
 watch(colorStage, (stage) => {
   const icon = stage >= 4 ? '💝' : '🤍'
@@ -29,6 +30,7 @@ const colorClass = computed(() => `color-stage-${colorStage.value}`)
 function goToStory() {
   colorStage.value = 1
   currentPage.value = 'story'
+  preloadImages()
 }
 
 function goToGame() {
@@ -37,14 +39,50 @@ function goToGame() {
 }
 
 function goToBirthday() {
-  currentPage.value = 'birthday'
+  pageFading.value = true
+  setTimeout(() => {
+    currentPage.value = 'birthday'
+    setTimeout(() => {
+      pageFading.value = false
+    }, 100)
+  }, 500)
 }
 
 function backToStart() {
   gameComplete.value = true
   colorStage.value = 4
   currentPage.value = 'start'
+  saveProgress()
 }
+
+// ── 缓存 ──
+onMounted(() => {
+  const saved = localStorage.getItem('birthday-game')
+  if (saved) {
+    const data = JSON.parse(saved)
+    gameComplete.value = data.gameComplete || false
+    colorStage.value = data.colorStage || 0
+  }
+})
+
+function saveProgress() {
+  localStorage.setItem('birthday-game', JSON.stringify({
+    gameComplete: gameComplete.value,
+    colorStage: colorStage.value,
+  }))
+}
+
+// App.vue 的 <script setup> 里加这个
+function preloadImages() {
+  const cards = import.meta.glob('./assets/cards/*.png', { eager: true })
+  const photos = import.meta.glob('./assets/photos/*.jpg', { eager: true })
+
+  Object.values({ ...cards, ...photos }).forEach(mod => {
+    const img = new Image()
+    img.src = mod.default
+  })
+}
+
 </script>
 
 <template>
@@ -74,5 +112,21 @@ function backToStart() {
       v-if="currentPage === 'birthday'"
       @back="backToStart"
     />
+   <div class="page-fade" :class="{ active: pageFading }"></div>
   </div>
 </template>
+
+<style>
+.page-fade {
+  position: fixed;
+  inset: 0;
+  background: #FFFCF8;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 999;
+  transition: opacity 0.5s ease;
+}
+.page-fade.active {
+  opacity: 1;
+}
+</style>

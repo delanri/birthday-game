@@ -80,15 +80,17 @@
         </p>
       </div>
 
-      <Transition name="btn">
-        <button
-          v-if="showButton"
-          class="door-btn"
-          @click="openDoor"
-        >
-          靠近看看
-        </button>
-      </Transition>
+      <div class="door-btn-area">
+  <Transition name="btn">
+    <button
+      v-if="showButton"
+      class="door-btn"
+      @click="openDoor"
+    >
+      靠近看看
+    </button>
+  </Transition>
+</div>
     </div>
 
     <!-- 推门光效 -->
@@ -117,7 +119,7 @@ const sections = [
     decoration: 'candle',
     lines: [
       '角落里有一盏没点亮的蜡烛——',
-      '高高的影子站成一排，有人跑在最前面忘了说话。',
+      '高高的身影站成一排，有人跑在最前面忘了说话。',
     ],
   },
   {
@@ -141,7 +143,7 @@ const sections = [
     decoration: 'receipt',
     lines: [
       '最底下压着一张沾着油污的收据——',
-      '厨房里乱成一团，但盘子全端出去了，分数比谁都没想到的高。',
+      '厨房里乱成一团，但盘子全端出去了，分数比意料之中的高。',
     ],
   },
   {
@@ -573,5 +575,12 @@ onMounted(() => {
   0%  { clip-path: inset(0 50% 0 50%);     opacity: 0.85; }
   15% { clip-path: inset(0 49.7% 0 49.7%); opacity: 1; }
   100%{ clip-path: inset(0 0 0 0);          opacity: 1; }
+}
+
+.door-btn-area {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 </style>

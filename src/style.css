@@ -50,7 +50,8 @@ html, body {
 
 /* Stage 1: 故事 · 一点点颜色晕开 */
 .color-stage-1 {
-  --bg: #FFFCF8;
+  --bg: #FFFAF2;
+  --card-back: #F2EBE2;
   --bg-secondary: #FFF8F0;
   --text: #5D4E3C;
   --text-light: #A09080;
@@ -58,13 +59,13 @@ html, body {
   --accent-hover: #D08890;
   --border: #C0B0A0;
   --border-dark: #8B7D6B;
-  --card-back: #F0EBE5;
   --shadow: rgba(139, 125, 107, 0.15);
 }
 
 /* Stage 2: 第一轮 · 浅色 */
 .color-stage-2 {
-  --bg: #FFF8F2;
+  --bg: #FFF5E8;
+  --card-back: #ECE2D8;
   --bg-secondary: #FFF0E8;
   --text: #5D4E3C;
   --text-light: #A09080;
@@ -72,13 +73,13 @@ html, body {
   --accent-hover: #E08898;
   --border: #C0B0A0;
   --border-dark: #8B7D6B;
-  --card-back: #EDE5DD;
   --shadow: rgba(139, 125, 107, 0.18);
 }
 
 /* Stage 3: 第二轮 · 彩色加深 */
 .color-stage-3 {
-  --bg: #FFF0E8;
+  --bg: #FFEDD8;
+  --card-back: #E6D8CC;
   --bg-secondary: #FFE8D8;
   --text: #4A3C2E;
   --text-light: #8B7D6B;
@@ -86,7 +87,6 @@ html, body {
   --accent-hover: #E06880;
   --border: #B8A090;
   --border-dark: #7A6C5C;
-  --card-back: #E8DDD5;
   --shadow: rgba(120, 100, 80, 0.2);
 }
 

@@ -22,3 +22,7 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# 隐私图片不上传
+src/assets/photos/
+src/assets/cards/
