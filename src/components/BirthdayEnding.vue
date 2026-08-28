@@ -87,11 +87,14 @@
 
       <div class="heart-space">
         <Transition name="fade">
-          <button v-if="showHeart" class="heart-btn"
-            :class="{ shake: heartShaking }"
-            :style="{ filter: `hue-rotate(${heartHue}deg)` }"
-            @click="emit('back')">♡</button>
-        </Transition>
+  <div v-if="showHeart" class="heart-wrap">
+    <button class="heart-btn"
+      :class="{ shake: heartShaking }"
+      :style="{ filter: `hue-rotate(${heartHue}deg)` }"
+      @click="emit('back')">♡</button>
+    <span class="heart-hint">轻触带走这颗心</span>
+  </div>
+</Transition>
       </div>
     </div>
   </div>
@@ -513,4 +516,8 @@ const sparkles = (() => {
 
 .fade-enter-active { transition: opacity 1s ease; }
 .fade-enter-from   { opacity: 0; }
+
+.heart-wrap { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.heart-hint { font-size: 11px; color: rgba(232,144,168,0.45); letter-spacing: 1px; animation: hintBreathe 2.5s ease-in-out infinite; }
+@keyframes hintBreathe { 0%,100%{opacity:0.3} 50%{opacity:0.6} }
 </style>

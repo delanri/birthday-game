@@ -116,8 +116,8 @@
             <div class="popup-sub">柜台底下好像还压着什么……</div>
             <div class="popup-hint">✨ 再翻一次货架？</div>
             <div class="popup-btns">
-              <button class="pixel-btn pixel-btn--ghost" @click="dismissPopup()">先歇歇</button>
-              <button class="pixel-btn" @click="dismissPopup(); startRound2()">再来一次！</button>
+              <button class="pixel-btn pixel-btn--ghost" @click="dismissPopup()">先看照片</button>
+              <button class="pixel-btn" @click="dismissPopup(); startRound2()">再来一次</button>
             </div>
           </div>
           <div v-if="showPopup.type === 'round2'" class="overlay-box">
