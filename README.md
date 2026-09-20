@@ -67,12 +67,11 @@ src/
 │   └── photos/             # 相册照片 (jpg)
 ```
 
-## 本地运行
+License
 
-```bash
-npm install
-npm run dev
-```
+MIT
+
+<p align="center">一周，从概念到上线，一个人完成。</p>
 
 ## License
 
