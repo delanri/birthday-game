@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>回忆杂货铺 · Memory General Store</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='55' text-anchor='middle' dominant-baseline='central' font-size='80'>🎂</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #FFFCF8;
+  --bg-warm: #FFF8F0;
+  --bg-card: #FAF6F0;
+  --text: #4A3F35;
+  --text-light: #8B7E6A;
+  --accent: #D4A574;
+  --accent-soft: #E8C9A8;
+  --border: #C8C0B0;
+  --border-dark: #5D4E3C;
+  --shadow: rgba(93, 78, 60, 0.08);
+  --sky: #C0D8F0;
+  --green: #C8E4A8;
+  --pink: #F0C8D8;
+  --gold: #F0DCA8;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1A1714;
+    --bg-warm: #1E1B16;
+    --bg-card: #252118;
+    --text: #E8DDD0;
+    --text-light: #A89880;
+    --accent: #D4A574;
+    --accent-soft: #6B5A42;
+    --border: #3D3628;
+    --border-dark: #C8B898;
+    --shadow: rgba(0, 0, 0, 0.25);
+    --sky: #3A4E60;
+    --green: #3E4E30;
+    --pink: #503848;
+    --gold: #504830;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #1A1714;
+  --bg-warm: #1E1B16;
+  --bg-card: #252118;
+  --text: #E8DDD0;
+  --text-light: #A89880;
+  --accent: #D4A574;
+  --accent-soft: #6B5A42;
+  --border: #3D3628;
+  --border-dark: #C8B898;
+  --shadow: rgba(0, 0, 0, 0.25);
+  --sky: #3A4E60;
+  --green: #3E4E30;
+  --pink: #503848;
+  --gold: #504830;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: env(safe-area-inset-top, 0px);
+}
+
+body {
+  font-family: 'Inter', 'Noto Serif SC', -apple-system, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.7;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ━━━ Hero ━━━ */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 24px;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.hero-p {
+  position: absolute;
+  bottom: -20px;
+  color: var(--border);
+  opacity: 0;
+  animation: floatUp linear infinite;
+  animation-fill-mode: both;
+}
+
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.15; }
+  92% { opacity: 0.15; }
+  100% { transform: translateY(-110vh) rotate(180deg); opacity: 0; }
+}
+
+.hero-cake {
+  font-size: 56px;
+  margin-bottom: 20px;
+  animation: gentleFloat 3s ease-in-out infinite;
+}
+
+@keyframes gentleFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.hero-frame {
+  border: 3px solid var(--border-dark);
+  padding: 36px 32px;
+  max-width: 420px;
+  width: 100%;
+  position: relative;
+  background: var(--bg);
+  box-shadow: 0 6px 0 0 var(--shadow);
+}
+
+.corner {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  pointer-events: none;
+  opacity: 0.5;
+}
+.corner-tl { top: -1px; left: -1px; border-top: 3px solid var(--accent); border-left: 3px solid var(--accent); }
+.corner-tr { top: -1px; right: -1px; border-top: 3px solid var(--accent); border-right: 3px solid var(--accent); }
+.corner-bl { bottom: -1px; left: -1px; border-bottom: 3px solid var(--accent); border-left: 3px solid var(--accent); }
+.corner-br { bottom: -1px; right: -1px; border-bottom: 3px solid var(--accent); border-right: 3px solid var(--accent); }
+
+.hero-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 5px;
+  margin-bottom: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.hero-title::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -80%; width: 50%; height: 100%;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 40%, rgba(255,255,255,0.5) 50%, rgba(255,255,255,0.3) 60%, transparent 100%);
+  transform: skewX(-15deg);
+  animation: shimmer 4s ease-in-out 1.5s infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { left: -80%; }
+  50% { left: 130%; }
+}
+
+.hero-sub {
+  font-size: 13px;
+  color: var(--text-light);
+  letter-spacing: 2px;
+  margin-bottom: 16px;
+}
+
+.hero-divider {
+  width: 48px;
+  height: 3px;
+  background: var(--border);
+  margin: 0 auto 16px;
+}
+
+.hero-desc {
+  font-size: 14px;
+  color: var(--text-light);
+  line-height: 1.8;
+  letter-spacing: 0.5px;
+}
+
+.hero-meta {
+  margin-top: 24px;
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.meta-tag {
+  font-size: 11px;
+  padding: 4px 12px;
+  border: 2px solid var(--border);
+  color: var(--text-light);
+  letter-spacing: 0.5px;
+  background: var(--bg-card);
+}
+
+.demo-btn {
+  display: inline-block;
+  margin-top: 24px;
+  padding: 12px 32px;
+  border: 3px solid var(--border-dark);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-decoration: none;
+  cursor: pointer;
+  box-shadow: 0 4px 0 0 var(--shadow);
+  transition: transform 0.1s, box-shadow 0.1s;
+  position: relative;
+}
+
+.demo-btn:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 0 var(--shadow);
+}
+
+.hero-scroll {
+  position: absolute;
+  bottom: 32px;
+  font-size: 12px;
+  color: var(--border);
+  letter-spacing: 2px;
+  animation: breathe 2.5s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+/* ━━━ Sections ━━━ */
+.section {
+  padding: 80px 24px;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.section-label {
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 3px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-bottom: 20px;
+}
+
+.section p {
+  font-size: 14px;
+  line-height: 1.9;
+  color: var(--text-light);
+  margin-bottom: 16px;
+  max-width: 520px;
+}
+
+/* ━━━ Story section ━━━ */
+.story-section {
+  background: #121218;
+  color: rgba(255,255,255,0.9);
+  padding: 80px 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.story-section .section-label { color: rgba(255,210,140,0.6); }
+.story-section .section-title { color: rgba(255,255,255,0.9); }
+.story-section p { color: rgba(255,255,255,0.6); }
+
+.story-light {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: radial-gradient(ellipse at 50% 8%, rgba(255,215,150,0.35) 0%, rgba(255,200,120,0.15) 20%, transparent 55%);
+  pointer-events: none;
+}
+
+.story-inner {
+  max-width: 640px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.shelf-items {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.shelf-item {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  border: 1px solid rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.02);
+}
+
+.shelf-emoji {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 36px;
+  text-align: center;
+  padding-top: 2px;
+}
+
+.shelf-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.shelf-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.85);
+  letter-spacing: 1px;
+}
+
+.shelf-hint {
+  font-size: 12px;
+  color: rgba(255,255,255,0.4);
+  line-height: 1.7;
+  letter-spacing: 0.5px;
+}
+
+.shelf-decoration {
+  font-size: 10px;
+  color: rgba(255,210,140,0.4);
+  letter-spacing: 0.5px;
+  margin-top: 2px;
+}
+
+/* ━━━ Features grid ━━━ */
+.features {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+@media (max-width: 500px) {
+  .features { grid-template-columns: 1fr; }
+}
+
+.feature-card {
+  border: 2px solid var(--border);
+  padding: 20px 16px;
+  background: var(--bg-card);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature-emoji { font-size: 24px; }
+
+.feature-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.5px;
+}
+
+.feature-desc {
+  font-size: 12px;
+  color: var(--text-light);
+  line-height: 1.7;
+  margin-bottom: 0 !important;
+  max-width: none !important;
+}
+
+/* ━━━ Color stages ━━━ */
+.color-stages {
+  display: flex;
+  gap: 3px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+}
+
+.stage-bar {
+  flex: 1;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  letter-spacing: 0.5px;
+  color: #6B5A42;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+
+.stage-bar:nth-child(1) { background: #FFFCF8; }
+.stage-bar:nth-child(2) { background: #FFF9F2; }
+.stage-bar:nth-child(3) { background: #FFF0E0; }
+.stage-bar:nth-child(4) { background: #FFE5C8; }
+.stage-bar:nth-child(5) { background: linear-gradient(135deg, #FFE8E8, #FFF0D0, #E8FFE8, #E0F0FF, #F0E8FF); }
+
+/* ━━━ Screenshot placeholders ━━━ */
+.screenshot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-top: 28px;
+}
+
+.screenshot-card {
+  border: 2px solid var(--border);
+  background: var(--bg-card);
+  overflow: hidden;
+}
+
+.screenshot-img {
+  width: 100%;
+  aspect-ratio: 9 / 16;
+  background: var(--bg-warm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36px;
+  color: var(--border);
+  position: relative;
+  overflow: hidden;
+}
+
+.screenshot-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.screenshot-img .placeholder-text {
+  position: absolute;
+  font-size: 11px;
+  color: var(--border);
+  letter-spacing: 1px;
+  bottom: 12px;
+}
+
+.screenshot-label {
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+  letter-spacing: 0.5px;
+  border-top: 2px solid var(--border);
+}
+
+/* ━━━ Mischief section ━━━ */
+.mischief-demo {
+  margin-top: 24px;
+  border: 2px solid var(--border);
+  padding: 20px;
+  background: var(--bg-card);
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.mini-card-demo {
+  width: 48px;
+  height: 56px;
+  border: 2px solid var(--border);
+  background: repeating-conic-gradient(var(--bg-card) 0% 25%, var(--bg-warm) 0% 50%) 50% / 10px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 14px;
+  color: var(--border);
+}
+
+.mini-legs {
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.mini-leg {
+  display: block;
+  width: 3px;
+  height: 6px;
+  background: var(--text-light);
+  border-radius: 0 0 1px 1px;
+}
+
+.mini-leg:first-child { animation: legWalk 0.3s step-end infinite; }
+.mini-leg:last-child { animation: legWalk 0.3s step-end 0.15s infinite; }
+
+@keyframes legWalk {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+
+.mischief-label {
+  font-size: 13px;
+  color: var(--text);
+  letter-spacing: 0.5px;
+  line-height: 1.7;
+}
+
+.mischief-sub {
+  font-size: 11px;
+  color: var(--text-light);
+  margin-top: 4px;
+}
+
+/* ━━━ Tech section ━━━ */
+.tech-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.tech-tag {
+  padding: 8px 16px;
+  border: 2px solid var(--border);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  background: var(--bg-card);
+  letter-spacing: 0.5px;
+}
+
+/* ━━━ Footer ━━━ */
+.page-footer {
+  text-align: center;
+  padding: 60px 24px 80px;
+  border-top: 2px solid var(--border);
+}
+
+.footer-cake { font-size: 36px; margin-bottom: 16px; }
+
+.footer-text {
+  font-size: 14px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  line-height: 2;
+}
+
+.footer-credit {
+  font-size: 11px;
+  color: var(--border);
+  letter-spacing: 1px;
+  margin-top: 24px;
+}
+
+/* ━━━ Flow section ━━━ */
+.flow-track {
+  display: flex;
+  gap: 0;
+  margin-top: 28px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+}
+
+.flow-step {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 110px;
+}
+
+.flow-icon {
+  width: 48px;
+  height: 48px;
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  background: var(--bg-card);
+}
+
+.flow-arrow {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  padding-bottom: 28px;
+  color: var(--border);
+  font-size: 14px;
+}
+
+.flow-name {
+  font-size: 11px;
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.flow-desc {
+  font-size: 10px;
+  color: var(--text-light);
+  text-align: center;
+  line-height: 1.5;
+}
+
+/* ━━━ Divider ━━━ */
+.section-divider {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  padding: 8px 0;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.section-divider span {
+  font-size: 10px;
+  color: var(--border);
+}
+
+/* ━━━ Responsive ━━━ */
+@media (max-width: 420px) {
+  .hero-title { font-size: 22px; letter-spacing: 3px; }
+  .hero-frame { padding: 28px 20px; }
+  .section { padding: 60px 20px; }
+  .section-title { font-size: 19px; }
+  .flow-step { width: 90px; }
+  .screenshot-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ━━━ Hero ━━━ -->
+<section class="hero">
+  <div class="hero-particles" id="heroParticles"></div>
+
+  <div class="hero-cake">🎂</div>
+
+  <div class="hero-frame">
+    <span class="corner corner-tl"></span>
+    <span class="corner corner-tr"></span>
+    <span class="corner corner-bl"></span>
+    <span class="corner corner-br"></span>
+
+    <h1 class="hero-title">回忆杂货铺</h1>
+    <p class="hero-sub">Memory General Store</p>
+    <div class="hero-divider"></div>
+    <p class="hero-desc">
+      一个像素风翻牌记忆游戏，<br>
+      包裹在一间从白色渐变到五彩的杂货铺里。<br>
+      翻开卡片，收集四份游戏回忆，<br>
+      通关后解锁隐藏照片和生日祝福。
+    </p>
+    <div class="hero-meta">
+      <span class="meta-tag">Vue 3</span>
+      <span class="meta-tag">Pixel Art</span>
+      <span class="meta-tag">生日礼物</span>
+    </div>
+  </div>
+
+  <a class="demo-btn" href="https://delanri.github.io/birthday-game/" target="_blank" rel="noopener">
+    推门进入 ♡
+  </a>
+
+  <span class="hero-scroll">↓ 或者先往下看看</span>
+</section>
+
+<!-- ━━━ Concept ━━━ -->
+<section class="section">
+  <div class="section-label">概念</div>
+  <h2 class="section-title">不只是翻牌游戏</h2>
+  <p>
+    「回忆杂货铺」是一份给朋友的生日礼物。四组卡牌对应四款一起玩过的游戏——光遇、原神、星露谷物语、胡闹厨房。每组回忆都藏在杂货铺的货架上，等着被翻开。
+  </p>
+  <p>
+    整个页面从纯白开始，随着游戏推进逐渐上色，通关后变成五彩蛋糕。颜色本身就是叙事的一部分。
+  </p>
+
+  <div class="color-stages">
+    <div class="stage-bar">纯白</div>
+    <div class="stage-bar">微暖</div>
+    <div class="stage-bar">浅色</div>
+    <div class="stage-bar">加深</div>
+    <div class="stage-bar">五彩</div>
+  </div>
+  <p style="font-size: 11px; color: var(--text-light); letter-spacing: 0.5px; margin-top: -8px;">
+    五个颜色阶段 · CSS变量驱动全局配色
+  </p>
+</section>
+
+<div class="section-divider"><span>·</span><span>·</span><span>·</span></div>
+
+<!-- ━━━ Flow ━━━ -->
+<section class="section">
+  <div class="section-label">流程</div>
+  <h2 class="section-title">四幕体验</h2>
+  <p>
+    从推门进入杂货铺，到听老板讲货架上的故事，到翻牌收集回忆，最后看到生日祝福——一个完整的情感弧线。
+  </p>
+
+  <div class="flow-track">
+    <div class="flow-step">
+      <div class="flow-icon">🏪</div>
+      <span class="flow-name">杂货铺</span>
+      <span class="flow-desc">像素风入口<br>退出按钮会耍赖</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">📖</div>
+      <span class="flow-name">故事</span>
+      <span class="flow-desc">打字机叙事<br>灯光逐渐亮起</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">🃏</div>
+      <span class="flow-name">翻牌</span>
+      <span class="flow-desc">两轮记忆挑战<br>第二轮牌会跑</span>
+    </div>
+    <div class="flow-arrow">→</div>
+    <div class="flow-step">
+      <div class="flow-icon">🎂</div>
+      <span class="flow-name">生日</span>
+      <span class="flow-desc">蛋糕搭建<br>祝福炸开</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><span>·</span><span>·</span><span>·</span></div>
+
+<!-- ━━━ Story ━━━ -->
+<section class="story-section">
+  <div class="story-light"></div>
+  <div class="story-inner">
+    <div class="section-label">叙事设计</div>
+    <h2 class="section-title">货架上的故事</h2>
+    <p>
+      故事页用打字机效果逐字展开。每一段从一件货架上的物品开始，引出一段游戏回忆——但从不说破游戏名，只描写场景细节。每段配有对应的氛围装饰，随段落切换淡入淡出。
+    </p>
+
+    <div class="shelf-items">
+      <div class="shelf-item">
+        <span class="shelf-emoji">🕯️</span>
+        <div class="shelf-info">
+          <span class="shelf-name">一盏没点亮的蜡烛</span>
+          <span class="shelf-hint">高高的身影站成一排，有人跑在最前面忘了说话。</span>
+          <span class="shelf-decoration">装饰：烛火呼吸光点</span>
+        </div>
+      </div>
+      <div class="shelf-item">
+        <span class="shelf-emoji">🎋</span>
+        <div class="shelf-info">
+          <span class="shelf-name">一截旧竹竿</span>
+          <span class="shelf-hint">隔了好久又回到水面上，竹筏晃晃悠悠的，谁也没急着靠岸。</span>
+          <span class="shelf-decoration">装饰：水波细线飘过</span>
+        </div>
+      </div>
+      <div class="shelf-item">
+        <span class="shelf-emoji">💐</span>
+        <div class="shelf-info">
+          <span class="shelf-name">一小束干花</span>
+          <span class="shelf-hint">那一天，方块草地上开满花，谁都没有缺席。</span>
+          <span class="shelf-decoration">装饰：花瓣飘落</span>
+        </div>
+      </div>
+      <div class="shelf-item">
+        <span class="shelf-emoji">🧾</span>
+        <div class="shelf-info">
+          <span class="shelf-name">一张沾着油污的收据</span>
+          <span class="shelf-hint">厨房里乱成一团，但盘子全端出去了。</span>
+          <span class="shelf-decoration">装饰：收据纸影 + 油渍</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ━━━ Game mechanics ━━━ -->
+<section class="section">
+  <div class="section-label">游戏机制</div>
+  <h2 class="section-title">不只是记忆力</h2>
+  <p>
+    16张卡牌分成四组游戏回忆。第一轮是标准的记忆配对，翻牌收集。第二轮加入捣蛋系统——卡牌会反抗、逃跑、偷偷换位。概率随剩余牌数递增。
+  </p>
+
+  <div class="features">
+    <div class="feature-card">
+      <span class="feature-emoji">🔄</span>
+      <span class="feature-name">抖动拒绝</span>
+      <span class="feature-desc">翻开第二张时，卡牌有概率抖动然后翻回去，附带捣蛋消息</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🦵</span>
+      <span class="feature-name">长腿逃跑</span>
+      <span class="feature-desc">配对后卡牌长出像素小腿跑向别的格子，和另一张卡交换位置</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🐛</span>
+      <span class="feature-name">慢慢爬行</span>
+      <span class="feature-desc">卡牌偷偷离开原位，只走35%的距离，点击可以抓回来</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">📈</span>
+      <span class="feature-name">动态概率</span>
+      <span class="feature-desc">剩余牌越少，捣蛋概率越高，从40%递增到100%</span>
+    </div>
+  </div>
+
+  <div class="mischief-demo">
+    <div class="mini-card-demo">
+      !
+      <div class="mini-legs">
+        <span class="mini-leg"></span>
+        <span class="mini-leg"></span>
+      </div>
+    </div>
+    <div>
+      <div class="mischief-label">「记忆从货架上溜走了」</div>
+      <div class="mischief-sub">第二轮专属捣蛋消息</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><span>·</span><span>·</span><span>·</span></div>
+
+<!-- ━━━ Details ━━━ -->
+<section class="section">
+  <div class="section-label">细节</div>
+  <h2 class="section-title">藏在角落里的</h2>
+
+  <div class="features">
+    <div class="feature-card">
+      <span class="feature-emoji">⏱️</span>
+      <span class="feature-name">打字机节奏</span>
+      <span class="feature-desc">逗号320ms、句号400ms、破折号100ms，不同标点不同节奏</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">💡</span>
+      <span class="feature-name">灯光六级</span>
+      <span class="feature-desc">故事页头顶灯光随段落推进逐级变亮，从0.06到0.7</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🚪</span>
+      <span class="feature-name">推门光效</span>
+      <span class="feature-desc">clip-path从正中间向两侧裂开，0.65秒过渡到游戏页</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🔒</span>
+      <span class="feature-name">退出按钮</span>
+      <span class="feature-desc">点击震动 + 随机弹出杂货铺风格的拒绝消息</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🎨</span>
+      <span class="feature-name">动态favicon</span>
+      <span class="feature-desc">未通关时白色爱心，通关后自动变成蛋糕</span>
+    </div>
+    <div class="feature-card">
+      <span class="feature-emoji">🎬</span>
+      <span class="feature-name">蛋糕留白</span>
+      <span class="feature-desc">生日页蛋糕搭完后沉默两秒，然后庆祝同时炸开</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><span>·</span><span>·</span><span>·</span></div>
+
+<!-- ━━━ Screenshots ━━━ -->
+<section class="section">
+  <div class="section-label">画面</div>
+  <h2 class="section-title">铺子里的样子</h2>
+  <p>手机端优先设计，像素中文字体（ZPIX），全程触摸优化。</p>
+
+  <div class="screenshot-grid">
+    <div class="screenshot-card">
+      <div class="screenshot-img">
+        🏪
+        <span class="placeholder-text">开始页截图</span>
+      </div>
+      <div class="screenshot-label">杂货铺入口</div>
+    </div>
+    <div class="screenshot-card">
+      <div class="screenshot-img">
+        📖
+        <span class="placeholder-text">故事页截图</span>
+      </div>
+      <div class="screenshot-label">打字机叙事</div>
+    </div>
+    <div class="screenshot-card">
+      <div class="screenshot-img">
+        🃏
+        <span class="placeholder-text">游戏页截图</span>
+      </div>
+      <div class="screenshot-label">翻牌收集</div>
+    </div>
+    <div class="screenshot-card">
+      <div class="screenshot-img">
+        🎂
+        <span class="placeholder-text">生日页截图</span>
+      </div>
+      <div class="screenshot-label">蛋糕与祝福</div>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"><span>·</span><span>·</span><span>·</span></div>
+
+<!-- ━━━ Tech ━━━ -->
+<section class="section">
+  <div class="section-label">技术栈</div>
+  <h2 class="section-title">用了什么</h2>
+
+  <div class="tech-row">
+    <span class="tech-tag">Vue 3</span>
+    <span class="tech-tag">Vite</span>
+    <span class="tech-tag">Composition API</span>
+    <span class="tech-tag">CSS Variables</span>
+    <span class="tech-tag">CSS Animations</span>
+    <span class="tech-tag">ZPIX 像素字体</span>
+  </div>
+
+  <p style="margin-top: 24px;">
+    纯前端项目，没有后端。通关状态存储在 localStorage。所有动效使用 CSS animation + Vue Transition，没有引入动画库。组件结构拆分为 StartPage、StoryPage、GameBoard、BirthdayEnding 四个主页面 + TutorialPage、AlbumModal、AchievementModal 三个子组件。
+  </p>
+</section>
+
+<!-- ━━━ Footer ━━━ -->
+<footer class="page-footer">
+  <div class="footer-cake">🎂</div>
+  <p class="footer-text">
+    一周从零开始做完。<br>
+    概念、叙事、交互、动效，全链路一个人。
+  </p>
+  <p class="footer-credit">made with ♡</p>
+</footer>
+
+<script>
+// Hero floating particles
+(function() {
+  const container = document.getElementById('heroParticles');
+  if (!container) return;
+  const syms = ['✦','◇','✿','▪','★','♡','◆','❋','•','⬥'];
+  for (let i = 0; i < 18; i++) {
+    const el = document.createElement('span');
+    el.className = 'hero-p';
+    el.textContent = syms[i % syms.length];
+    el.style.left = (Math.random() * 90 + 5) + '%';
+    el.style.fontSize = (8 + Math.random() * 8) + 'px';
+    el.style.animationDelay = (Math.random() * 12) + 's';
+    el.style.animationDuration = (10 + Math.random() * 10) + 's';
+    container.appendChild(el);
+  }
+})();
+</script>
+
+</body>
+</html>
