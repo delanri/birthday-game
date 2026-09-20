@@ -67,12 +67,10 @@ src/
 │   └── photos/             # 相册照片 (jpg)
 ```
 
-License
-
-MIT
-
-<p align="center">一周，从概念到上线，一个人完成。</p>
-
 ## License
-
-MIT
+ 
+本项目仅供展示，未经授权不得复制、修改或用于任何用途。All rights reserved.
+ 
+---
+ 
+<p align="center">一周，从概念到上线，一个人完成。</p>
