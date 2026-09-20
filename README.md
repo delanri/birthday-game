@@ -1,5 +1,79 @@
-# Vue 3 + Vite
+# 🎂 回忆杂货铺 · Memory General Store
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+一个像素风翻牌记忆游戏，包裹在一间从白色渐变到五彩的杂货铺里。
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+给朋友的生日礼物。翻开卡片收集四份游戏回忆，通关后解锁隐藏照片和生日祝福。
+
+**[→ 在线体验](https://delanri.github.io/birthday-game/)** · **[→ 项目展示页](https://delanri.github.io/birthday-game/showcase.html)**
+
+---
+
+## 概念
+
+「回忆杂货铺」不只是一个翻牌游戏。四组卡牌对应四款一起玩过的游戏——光遇、原神、星露谷物语、胡闹厨房。每组回忆藏在杂货铺的货架上，等着被翻开。
+
+整个页面从纯白开始，随着游戏推进逐渐上色，通关后变成五彩蛋糕。颜色本身就是叙事的一部分。
+
+```
+纯白 → 微暖 → 浅色 → 彩色加深 → 五彩蛋糕
+开始页   故事页   第一轮    第二轮      通关回主页
+```
+
+## 四幕流程
+
+**杂货铺入口** — 像素风主页面，退出按钮会震动 + 随机弹出拒绝消息。通关前后文案和配色自动切换。
+
+**货架上的故事** — 打字机逐字展开，每段从一件货架物品引出一段回忆，不说破游戏名。暗色遮罩 + 头顶灯光六级递增 + 段落装饰淡入淡出（烛火 / 水波 / 花瓣 / 收据）。结尾推门光效 clip-path 从中间裂开。
+
+**翻牌收集** — 16 张卡牌 = 4 组 × 每组 2 对。第一轮标准配对，第二轮加入捣蛋系统：卡牌抖动拒绝翻开、长出像素小腿逃跑换位、慢慢爬离原位。概率随剩余牌数从 40% 递增到 100%。配对完成后解锁相册。
+
+**生日祝福** — 旁白逐行淡入，蛋糕一层层搭建 + 糖霜逐行掉落，沉默两秒后庆祝同时炸开：白闪 + 散景 + 彩带 + 生日快乐盖章弹入。
+
+## 细节
+
+- **打字机节奏**：逗号 320ms、句号 400ms、破折号 100ms，不同标点不同停顿
+- **颜色阶段**：CSS 变量驱动全局配色，一个 `colorStage` 数字控制五个阶段
+- **动态 favicon**：未通关 🤍 → 通关后 💝
+- **新手教程**：动画演示翻牌 / 配对 / 收集流程，第二轮展示卡牌跑路
+- **卡牌消失**：配对成功后先放大再缩小消失，不是直接移除
+- **相册系统**：收集栏点击查看解锁照片，隐藏照片通关第二轮后揭晓
+- **成就系统**：四项成就记录通关里程碑
+- **通关缓存**：localStorage 存储进度，回访时直接进入五彩状态
+
+## 技术栈
+
+- **框架**：Vue 3 + Vite
+- **字体**：ZPIX（像素中文字体）
+- **动效**：纯 CSS animation + Vue Transition，无动画库
+- **状态管理**：Composition API，无 Vuex / Pinia
+- **部署**：GitHub Pages
+
+## 项目结构
+
+```
+src/
+├── App.vue                 # 路由 + 颜色阶段控制
+├── style.css               # 全局样式 + CSS 变量
+├── components/
+│   ├── StartPage.vue       # 杂货铺入口
+│   ├── StoryPage.vue       # 打字机叙事
+│   ├── GameBoard.vue       # 翻牌游戏主体
+│   ├── BirthdayEnding.vue  # 蛋糕 + 生日祝福
+│   ├── TutorialPage.vue    # 新手教程
+│   ├── AlbumModal.vue      # 相册弹窗
+│   └── AchievementModal.vue # 成就弹窗
+├── assets/
+│   ├── cards/              # 卡牌图标 (png)
+│   └── photos/             # 相册照片 (jpg)
+```
+
+## 本地运行
+
+```bash
+npm install
+npm run dev
+```
+
+## License
+
+MIT
